@@ -1,0 +1,26 @@
+package org.security.simpleauthenticationspringsecurity.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfiguration {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(c -> c.disable())
+                .authorizeHttpRequests(request -> request.requestMatchers("/users/save").permitAll()
+                        .requestMatchers("/users/hello").authenticated()
+                        .requestMatchers("/users/bye").permitAll()
+                        .requestMatchers("/users/all").permitAll()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .build();
+    }
+}
